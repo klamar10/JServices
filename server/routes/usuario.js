@@ -1,14 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const _ = require ('underscore');
+
 // constantes
 const app = express();
 
 
 // Recursos
 const Usuario =  require ('../models/usuario'); 
+const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
 
-app.get('/usuario', function(req, res) {
+app.get('/usuario', verificaToken ,(req, res)=> {
     
     let desde = req.query.desde || 0;
     desde= Number(desde);
@@ -16,7 +18,7 @@ app.get('/usuario', function(req, res) {
     let limite = req.query.limite || 5;
     limite= Number(limite);
 
-    Usuario.find({estado : 'A'}, 'id nombre email estado') //google: true // campos a mostrar
+    Usuario.find({estado : 'A'}, 'id nombre email estado roles') //google: true // campos a mostrar
         .skip(desde)
         .limit(limite)
         .exec( (err, usuarios ) =>{
@@ -37,7 +39,7 @@ app.get('/usuario', function(req, res) {
 
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario',[verificaToken, verificaRol ],function(req, res) {
 
     let body = req.body;
 
@@ -65,10 +67,10 @@ app.post('/usuario', function(req, res) {
 
 
 });
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaRol ],function(req, res) {
 
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre78','email', 'img', 'role','estado'])  ;
+    let body = _.pick(req.body, ['nombre','email', 'img', 'roles','estado'])  ;
 
     Usuario.findByIdAndUpdate( id, body, { new: true, runValidators: true } ,(err, usuarioDB) =>{
         if(err){
@@ -87,7 +89,7 @@ app.put('/usuario/:id', function(req, res) {
     
 });
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id',[verificaToken, verificaRol ], function(req, res) {
     let id = req.params.id;
     let cambiaEstado ={
         estado: 'I'
