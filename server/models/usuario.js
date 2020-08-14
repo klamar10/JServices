@@ -13,6 +13,10 @@ let usuarioSchema = new Schema({
         type: String,
         required: [true, 'El nombre es necesario'] 
     },
+    DNI: {
+        type: Number,
+        required: [true, 'El DNI es necesario'] 
+    },
     email: {
         type: String,
         unique: true,
@@ -22,23 +26,19 @@ let usuarioSchema = new Schema({
         type: String,
         required: [true, 'La contraseña es necesario']
     },
-    img:{
-        type: String,
-        required: false
-    },
     roles:{
         type: String,
-        default: 'USER_ROLES',
+       default: 'Administrador',
         enum: rolesValidos
     }, // default: USER_ROLE
     estado:{
         type: String,
         required: [true, 'El estado es necesario']
-    },//boolean
-    google:{
-        type: Boolean,
-        default: false
-    }//boolean
+    },
+    empresa: {
+        type: String,
+        equired: [true, 'La empresa es necesaria']
+    }
 });
 usuarioSchema.methods.toJSON = function (){
     let user = this;
@@ -50,4 +50,4 @@ usuarioSchema.methods.toJSON = function (){
 }
 
 usuarioSchema.plugin( uniqueValidator, { message: '{PATH} debe de ser único'});
-module.exports = mongoose.model('Usuario', usuarioSchema);
+module.exports = mongoose.model('Usuarios', usuarioSchema);

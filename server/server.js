@@ -4,16 +4,19 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
+
+//CORS
+app.use(cors());
 
 // parse application/json
 app.use(bodyParser.json())
 
 // RUTAS global
-app.use(require('./routes/index.js'));
+app.use('/api',require('./routes/index.js'));
 
 
 mongoose.connect(process.env.URLDB, 

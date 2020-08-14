@@ -10,7 +10,17 @@ const app = express();
 const Usuario =  require ('../models/usuario'); 
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
 
-app.get('/usuario', verificaToken ,(req, res)=> {
+app.get('/usuario',(req, res) => {
+
+    Usuario.find()
+        .exec((err, usuarios) => {
+            if (err) {
+                return res.status(400).json(err);
+            }
+           res.json(usuarios)
+        });
+});
+app.get('/usuariox' ,(req, res)=> {
     
     let desde = req.query.desde || 0;
     desde= Number(desde);
@@ -18,7 +28,7 @@ app.get('/usuario', verificaToken ,(req, res)=> {
     let limite = req.query.limite || 5;
     limite= Number(limite);
 
-    Usuario.find({estado : 'A'}, 'id nombre email estado roles') //google: true // campos a mostrar
+    Usuario.find({estado : 'Activo'}, 'id nombre email estado roles empresa') //google: true // campos a mostrar
         .skip(desde)
         .limit(limite)
         .exec( (err, usuarios ) =>{
@@ -28,7 +38,7 @@ app.get('/usuario', verificaToken ,(req, res)=> {
                     err
                 });
             }
-            Usuario.count({estado : 'A'}, (err, conteo)=>{
+            Usuario.countDocuments({estado : 'Activo'}, (err, conteo)=>{
             res.json({
                 ok: true,
                 usuarios,
@@ -39,16 +49,32 @@ app.get('/usuario', verificaToken ,(req, res)=> {
 
 });
 
-app.post('/usuario',[verificaToken, verificaRol ],function(req, res) {
+app.get('/usuario/:empresa' ,(req, res)=> {
+    let empresa = req.params.empresa;
+    Usuario.find({empresa : empresa})
+        .exec((err, empresa) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+           res.json(empresa)
+        });
+});
+
+app.post('/usuario',function(req, res) {
 
     let body = req.body;
 
     let usuario = new Usuario({
         nombre: body.nombre,
+        DNI: body.DNI,
         email: body.email,
         password: bcrypt.hashSync(body.password, 10), 
         roles: body.roles,
-        estado: body.estado
+        estado: body.estado,
+        empresa: body.empresa
     });
 
     usuario.save( (err,usuarioDB)=>{
@@ -70,7 +96,7 @@ app.post('/usuario',[verificaToken, verificaRol ],function(req, res) {
 app.put('/usuario/:id', [verificaToken, verificaRol ],function(req, res) {
 
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre','email', 'img', 'roles','estado'])  ;
+    let body = _.pick(req.body, ['nombre','email', 'img', 'roles','estado','empresa'])  ;
 
     Usuario.findByIdAndUpdate( id, body, { new: true, runValidators: true } ,(err, usuarioDB) =>{
         if(err){
