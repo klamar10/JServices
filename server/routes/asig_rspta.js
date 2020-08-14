@@ -26,57 +26,47 @@ app.post('/AsigRpta', function (req, res) {
         FechaR: now,
         FechaC: ctr
     });
-    Respuesta.findOne({}, (err, respuestaDB) => {
-
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                err
-            });
-        }
-        if (!respuestaDB) {
-            respuesta.save((err, asigBD) => {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        err
-                    });
+    let met =req.body.Metrica
+    Respuesta.findOne({Nombre: body.Nombre, FechaC: ctr, Metrica: met}, (err, respuestaDB) => {
+        if (!respuestaDB){
+            respuesta.save((err, regis)=>{
+                if(err){
+                    return res.status(400).json(err);
                 }
-                //usuarioDB.password = null;
                 res.json({
                     ok: true,
-                    respuesta: asigBD
+                    metrica: regis
                 });
-            });
-        }
-        else {
-            if ((respuestaDB.Metrica == body.Metrica)) {
-                if ((respuestaDB.Nombre == body.Nombre)) {
-                    if ((respuestaDB.FechaC == control)) {
-                         res.status(500)
-                    } else {
-                        respuesta.save((registrar) => {
-                            res.json(registrar);
-                        })
-                    }
-                }
-                respuesta.save((registrar) => {
-                     res.json(registrar);
-                 })
+            })
+        }else {
+        return res.status(400).json({
+            ok: false,
+            err:{
+                message: 'Ya se encuentra gestionado'
             }
-            respuesta.save((registrar) => {
-                 res.json(registrar);
-             })
-        }
+        });}
+        });
 
-
-    })
 });
 app.get('/AsigRptas', (req, res) => {
     let FechaC = req.body.FechaC;
     let Metricac = req.body.Metrica;
     let Nombre = req.body.Nombre;
     Respuesta.find({ Metrica: Metricac, FechaC: FechaC, Nombre: Nombre })
+        .exec((err, asignacion) => {
+            if (err) {
+                return res.status(400).json(
+                    {
+                        ok: false,
+                        err
+                    });
+            }
+            res.json(asignacion)
+        });
+});
+app.get('/AsigRpta', (req, res) => {
+
+    Respuesta.find()
         .exec((err, asignacion) => {
             if (err) {
                 return res.status(400).json(

@@ -40,16 +40,29 @@ app.post('/Indicador',function(req,res){
         Metrica: body.Metrica,
         Indicador: body.Indicador,
     });
-    indicador.save( (err,indicadorDB)=>{
-        if(err){
-            return res.status(400).json(err);
-        }
-        //usuarioDB.password = null;
-        res.json({
-            ok: true,
-            indicador: indicadorDB
-        });
-    });
+    Indicador.findOne({Empresa:body.Empresa, Zona: body.Zona,Metrica: body.Metrica,Indicador: body.Indicador},(err,indi)=>{
+        if(!indi){
+            indicador.save( (err,indiDB)=>{
+                if(err){
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+                //usuarioDB.password = null;
+                res.json({
+                    ok: true,
+                    Indicador: indiDB
+                });
+            });
+        }else {
+            return res.status(400).json({
+                ok: false,
+                err:{
+                    message: 'Ya se encuentra registrado'
+                }
+            });}
+    })
 });
 app.put('/Indicador/:id', function(req, res) {
 

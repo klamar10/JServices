@@ -25,7 +25,7 @@ mongoose.connect(process.env.URLDB,
 
 
     if (err) throw err;
-    console.log('Base de datos conectado');
+    console.log('Base de datos conectado'+ process.env.URLDB);
 });
   
 app.listen(process.env.PORT, () => {

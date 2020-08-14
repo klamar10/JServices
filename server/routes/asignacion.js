@@ -20,11 +20,10 @@ app.post('/Asignacion',function(req,res){
         Indicador: body.Indicador,
         Fecha: now
     });
-
-    Asignacion.findOne({}, (err, respuestaDB) =>{
-        if (!respuestaDB) {
-            asignacion.save((err, asigBD) => {
-                if (err) {
+Asignacion.findOne({Empresa:body.Empresa, Zona: body.Zona,Metrica: body.Metrica,Nombre: body.Nombre,Indicador: body.Indicador},(err,asig)=>{
+        if(!asig){
+            asignacion.save( (err,asigDB)=>{
+                if(err){
                     return res.status(400).json({
                         ok: false,
                         err
@@ -33,33 +32,17 @@ app.post('/Asignacion',function(req,res){
                 //usuarioDB.password = null;
                 res.json({
                     ok: true,
-                    asignacion: asigBD
+                    asignacion: asigDB
                 });
             });
-        }
-
-         else {  if((respuestaDB.Metrica == body.Metrica)){
-                if((respuestaDB.Nombre == body.Nombre)){
-                    return res.status(400).json({
-                        ok: false,
-                        err
-                    });
+        }else {
+            return res.status(400).json({
+                ok: false,
+                err:{
+                    message: 'Ya se encuentra asignado'
                 }
-                asignacion.save((err, asig)=>{
-                 return    res.json({
-                    ok: true,
-                    asignacion: asig
-                });
-                })
-            }    asignacion.save((err, asig)=>{
-                return  res.json({
-                    ok: true,
-                    asignacion: asig
-                });
-            })}
-            
-        
-    });
+            });}
+    })
 
 });
 app.get('/Asignaciones',(req, res) => {

@@ -56,22 +56,29 @@ app.post('/Zona',function(req, res) {
         Empresa: body.Empresa,
         Estado: body.Estado
     });
-
-    zona.save( (err,zonaDB)=>{
-        if(err){
-            return res.status(400).json({
-                ok: false,
-                err
+Zona.findOne({Empresa:body.Empresa, Zona: body.Zona},(err,zonar)=>{
+    if(!zonar){
+        zona.save( (err,zonaDB)=>{
+            if(err){
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            //usuarioDB.password = null;
+            res.json({
+                ok: true,
+                Zona: zonaDB
             });
-        }
-        //usuarioDB.password = null;
-        res.json({
-            ok: true,
-            usuario: zonaDB
         });
-    });
-
-
+    }else {
+        return res.status(400).json({
+            ok: false,
+            err:{
+                message: 'Ya se encuentra registrado'
+            }
+        });}
+})
 });
 app.put('/Zona/:id', [verificaToken ],function(req, res) {
 

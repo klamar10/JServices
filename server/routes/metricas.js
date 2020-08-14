@@ -44,16 +44,29 @@ app.post('/Metrica',function(req,res){
         Zona: body.Zona,
         Metrica: body.Metrica
     });
-    metrica.save( (err,metricaDB)=>{
-        if(err){
-            return res.status(400).json(err);
-        }
-        //usuarioDB.password = null;
-        res.json({
-            ok: true,
-            metrica: metricaDB
-        });
-    });
+    Metrica.findOne({Empresa:body.Empresa, Zona: body.Zona,Metrica: body.Metrica},(err,metricar)=>{
+        if(!metricar){
+            metrica.save( (err,metDB)=>{
+                if(err){
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+                //usuarioDB.password = null;
+                res.json({
+                    ok: true,
+                    Metrica: metDB
+                });
+            });
+        }else {
+            return res.status(400).json({
+                ok: false,
+                err:{
+                    message: 'Ya se encuentra registrado'
+                }
+            });}
+    })
 });
 app.put('/Metrica/:id', function(req, res) {
 
