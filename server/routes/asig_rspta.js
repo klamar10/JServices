@@ -110,6 +110,25 @@ app.get('/AsigRptaC/:Empresa', (req, res) => {
             });
         });
 });
+app.get('/AsigRptaT/:Empresa', (req, res) => {
+    let Empresa = req.params.Empresa;
+    Respuesta.find({ Empresa: Empresa })
+        .exec((err, metrica) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            Respuesta.countDocuments({ Empresa: Empresa}, (err, conteo) => {
+
+                let data = [
+                    { contar: conteo }
+                ];
+                res.json(data)
+            });
+        });
+});
 app.get('/x', (req, res) => {
 
     let body = req.body;
