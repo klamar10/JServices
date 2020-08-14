@@ -20,7 +20,7 @@ app.post('/Asignacion',function(req,res){
         Indicador: body.Indicador,
         Fecha: now
     });
-Asignacion.findOne({Empresa:body.Empresa, Zona: body.Zona,Metrica: body.Metrica,Nombre: body.Nombre,Indicador: body.Indicador},(err,asig)=>{
+Asignacion.findOne({Empresa:body.Empresa, Zona: body.Zona,Metrica: body.Metrica,Nombre: body.Nombre},(err,asig)=>{
         if(!asig){
             asignacion.save( (err,asigDB)=>{
                 if(err){
