@@ -13,7 +13,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // ============================
 // 60s * 60m * 24hr  * 30d
 
-process.env.CADUCIDAD_TOKEN=60 * 60 *24* 1;
+process.env.CADUCIDAD_TOKEN=60 * 60 *24* 2;
 
 // ============================
 //  SEED de autenticacion
