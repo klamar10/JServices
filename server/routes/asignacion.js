@@ -47,7 +47,7 @@ Asignacion.findOne({Empresa:body.Empresa, Zona: body.Zona,Metrica: body.Metrica,
     })
 
 });
-app.get('/Asignaciones',[verificaToken, verificaRol ],(req, res) => {
+app.get('/Asignaciones',[verificaToken],(req, res) => {
     let now = dateLima //Obtienes la fecha
 //var dat2 = Date.parse(dat); //Lo parseas para transformarlo
     Asignacion.find()
