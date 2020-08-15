@@ -9,6 +9,7 @@ var gps = new GPS;
 const app = express();
 
 // Recursos
+const Asignacion =  require ('../models/asignacion'); 
 const Respuesta = require('../models/asig_rspt');
 app.post('/AsigRpta', function (req, res) {
     let now = dateLima;
@@ -112,7 +113,7 @@ app.get('/AsigRptaC/:Empresa', (req, res) => {
 });
 app.get('/AsigRptaT/:Empresa', (req, res) => {
     let Empresa = req.params.Empresa;
-    Respuesta.find({ Empresa: Empresa })
+    Asignacion.find({ Empresa: Empresa })
         .exec((err, metrica) => {
             if (err) {
                 return res.status(400).json({
@@ -120,7 +121,7 @@ app.get('/AsigRptaT/:Empresa', (req, res) => {
                     err
                 });
             }
-            Respuesta.countDocuments({ Empresa: Empresa}, (err, conteo) => {
+            Asignacion.countDocuments({ Empresa: Empresa}, (err, conteo) => {
 
                 let data = [
                     { contar: conteo }
