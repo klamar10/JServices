@@ -80,7 +80,7 @@ app.get('/AsigRpta', [verificaToken ],(req, res) => {
             res.json(asignacion)
         });
 });
-app.get('/AsigRptas/:Empresa',[verificaToken, verificaRol ], (req, res) => {
+app.get('/AsigRptas/:Empresa',[verificaToken], (req, res) => {
     let Empresa = req.params.Empresa;
     Respuesta.find({ Empresa: Empresa })
         .exec((err, metrica) => {
@@ -93,7 +93,7 @@ app.get('/AsigRptas/:Empresa',[verificaToken, verificaRol ], (req, res) => {
             res.json(metrica)
         });
 });
-app.get('/AsigRptaC/:Empresa',[verificaToken, verificaRol ], (req, res) => {
+app.get('/AsigRptaC/:Empresa',[verificaToken ], (req, res) => {
     let Empresa = req.params.Empresa;
     Respuesta.find({ Empresa: Empresa })
         .exec((err, metrica) => {
@@ -112,7 +112,7 @@ app.get('/AsigRptaC/:Empresa',[verificaToken, verificaRol ], (req, res) => {
             });
         });
 });
-app.get('/AsigRptaT/:Empresa', [verificaToken, verificaRol ],(req, res) => {
+app.get('/AsigRptaT/:Empresa', [verificaToken ],(req, res) => {
     let Empresa = req.params.Empresa;
     Asignacion.find({ Empresa: Empresa })
         .exec((err, metrica) => {
@@ -131,7 +131,7 @@ app.get('/AsigRptaT/:Empresa', [verificaToken, verificaRol ],(req, res) => {
             });
         });
 });
-app.get('/x',[verificaToken, verificaRol ], (req, res) => {
+app.get('/x',[verificaToken ], (req, res) => {
 
     let body = req.body;
     Respuesta.find({}, (err, respuestaDB) => {
