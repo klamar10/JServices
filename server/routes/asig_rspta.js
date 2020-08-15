@@ -12,7 +12,7 @@ const app = express();
 const Asignacion =  require ('../models/asignacion'); 
 const Respuesta = require('../models/asig_rspt');
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
-app.post('/AsigRpta', [verificaToken, verificaRol ],function (req, res) {
+app.post('/AsigRpta', [verificaToken ],function (req, res) {
     let now = dateLima;
     let ctr = control;
     let body = req.body;
@@ -50,7 +50,7 @@ app.post('/AsigRpta', [verificaToken, verificaRol ],function (req, res) {
         });
 
 });
-app.get('/AsigRptas',[verificaToken, verificaRol ], (req, res) => {
+app.get('/AsigRptas',[verificaToken ], (req, res) => {
     let FechaC = req.body.FechaC;
     let Metricac = req.body.Metrica;
     let Nombre = req.body.Nombre;
@@ -66,7 +66,7 @@ app.get('/AsigRptas',[verificaToken, verificaRol ], (req, res) => {
             res.json(asignacion)
         });
 });
-app.get('/AsigRpta', [verificaToken, verificaRol ],(req, res) => {
+app.get('/AsigRpta', [verificaToken ],(req, res) => {
 
     Respuesta.find()
         .exec((err, asignacion) => {
