@@ -105,7 +105,7 @@ app.post('/usuario',[verificaToken, verificaRol ],function(req, res) {
 app.put('/usuario/:id', [verificaToken, verificaRol ],function(req, res) {
 
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre','email', 'img', 'roles','estado','empresa'])  ;
+    let body = _.pick(req.body, ['empresa','nombre','DNI','email','password', 'roles','estado'])  ;
 
     Usuario.findByIdAndUpdate( id, body, { new: true, runValidators: true } ,(err, usuarioDB) =>{
         if(err){
