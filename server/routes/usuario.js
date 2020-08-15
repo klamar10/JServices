@@ -22,8 +22,7 @@ app.get('/usuario',[verificaToken, verificaRol ],(req, res) => {
 });
 app.get('/usuario:id',[verificaToken, verificaRol ],(req, res) => {
     let id = req.params.id
-    Usuario.findOne({_id: id})
-        .exec((err, usuarios) => {
+    Usuario.findOne({_id: id},(err, usuarios)=> {
             if (err) {
                 return res.status(400).json(err);
             }
