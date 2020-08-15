@@ -36,21 +36,13 @@ app.get('/EmpresaA',[verificaToken, verificaRol ],(req, res) => {
 });
 app.get('/Empresa/:id',[verificaToken, verificaRol ],(req, res) => {
 
-    let id = req.params.id;
-    let body = _.pick(req.body, ['Ruc','Nombre', 'Departamento', 'Estado'])  ;
-
-    Empresa.findById( id, body ,(err, empresaDB) =>{
-        if(err){
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-        res.json({
-            ok: true,
-            empresa: empresaDB
+    let id = req.params.id
+    Empresa.findOne({_id: id},(err, usuarios)=> {
+            if (err) {
+                return res.status(400).json(err);
+            }
+           res.json(usuarios)
         });
-    })
 });
 app.post('/Empresa',[verificaToken, verificaRol ],function(req,res){
     let body = req.body;
