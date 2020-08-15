@@ -7,7 +7,6 @@ let Schema = mongoose.Schema;
 let empresaSchema  = new Schema({
     Ruc:{
         type: Number,
-        unique: true,
         required: [true, 'El ruc es necesario']
     },
     Nombre:{
