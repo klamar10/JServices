@@ -74,7 +74,7 @@ app.get('/Asignaciones/:Nombre',[verificaToken, verificaRol ],(req,res)=>{
            res.json(metrica)
         });
 });
-app.get('/Asignacion/:id',[verificaToken, verificaRol ],(req,res)=>{
+app.get('/Asignacion/:id',[verificaToken ],(req,res)=>{
     let Id = req.params.id;
     Asignacion.findOne({_id : Id})
         .exec((err,  asignacion   ) => {
