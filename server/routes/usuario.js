@@ -20,6 +20,16 @@ app.get('/usuario',[verificaToken, verificaRol ],(req, res) => {
            res.json(usuarios)
         });
 });
+app.get('/usuario:id',[verificaToken, verificaRol ],(req, res) => {
+    let id = req.params.id
+    Usuario.findOne({id: id})
+        .exec((err, usuarios) => {
+            if (err) {
+                return res.status(400).json(err);
+            }
+           res.json(usuarios)
+        });
+});
 app.get('/usuariox' ,(req, res)=> {
     
     let desde = req.query.desde || 0;
