@@ -11,7 +11,7 @@ const Zona =  require ('../models/zona');
 const Empresas =  require ('../models/empresa'); 
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
 
-app.get('/Zonas' ,(req, res)=> {
+app.get('/Zonas' ,[verificaToken, verificaRol ],(req, res)=> {
     Zona.find()
         .exec((err, zonas) => {
             if (err) {
@@ -24,7 +24,7 @@ app.get('/Zonas' ,(req, res)=> {
         });
 
 });
-app.get("/Zonass" ,(req, res)=> {
+app.get("/Zonass" ,[verificaToken, verificaRol ],(req, res)=> {
     Zona.find().
     populate('empresas').
     exec(function (err, pacientes) {
@@ -32,7 +32,7 @@ app.get("/Zonass" ,(req, res)=> {
       console.log(pacientes);
     });
 });
-app.get('/Zona/:empresa' ,(req, res)=> {
+app.get('/Zona/:empresa' ,[verificaToken, verificaRol ],(req, res)=> {
     let empresa = req.params.empresa;
     Zona.find({Empresa : empresa})
         .exec((err, zonas) => {
@@ -47,7 +47,7 @@ app.get('/Zona/:empresa' ,(req, res)=> {
 
 });
 
-app.post('/Zona',function(req, res) {
+app.post('/Zona',[verificaToken, verificaRol ],function(req, res) {
 
     let body = req.body;
 
@@ -80,7 +80,7 @@ Zona.findOne({Empresa:body.Empresa, Zona: body.Zona},(err,zonar)=>{
         });}
 })
 });
-app.put('/Zona/:id', [verificaToken ],function(req, res) {
+app.put('/Zona/:id', [verificaToken, verificaRol ],function(req, res) {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['Empresa','Zona','estado']);
@@ -102,7 +102,7 @@ app.put('/Zona/:id', [verificaToken ],function(req, res) {
     
 });
 
-app.delete('/Zona/:id', function(req, res) {
+app.delete('/Zona/:id', [verificaToken, verificaRol ],function(req, res) {
     let id = req.params.id;
     let cambiaEstado ={
         estado: 'I'

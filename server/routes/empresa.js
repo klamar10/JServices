@@ -8,9 +8,10 @@ const app = express();
 
 // Recursos
 const Empresa =  require ('../models/empresa'); 
+const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
 
 
-app.get('/Empresas',(req, res) => {
+app.get('/Empresas',[verificaToken, verificaRol ],(req, res) => {
 
     Empresa.find()
         .exec((err, empresas) => {
@@ -20,7 +21,7 @@ app.get('/Empresas',(req, res) => {
            res.json(empresas)
         });
 });
-app.get('/EmpresaA',(req, res) => {
+app.get('/EmpresaA',[verificaToken, verificaRol ],(req, res) => {
 
     Empresa.find({Estado : 'Activo'},'Ruc Nombre Departamento')
         .exec((err, empresas) => {
@@ -33,7 +34,7 @@ app.get('/EmpresaA',(req, res) => {
            res.json(empresas)
         });
 });
-app.get('/Empresa/:id',(req, res) => {
+app.get('/Empresa/:id',[verificaToken, verificaRol ],(req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['Ruc','Nombre', 'Departamento', 'Estado'])  ;
@@ -51,7 +52,7 @@ app.get('/Empresa/:id',(req, res) => {
         });
     })
 });
-app.post('/Empresa',function(req,res){
+app.post('/Empresa',[verificaToken, verificaRol ],function(req,res){
     let body = req.body;
 
     let empresa = new Empresa({
@@ -74,7 +75,7 @@ app.post('/Empresa',function(req,res){
         });
     });
 });
-app.put('/Empresa/:id', function(req, res) {
+app.put('/Empresa/:id', [verificaToken, verificaRol ],function(req, res) {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['Ruc','Nombre', 'Departamento', 'Estado'])  ;
@@ -94,7 +95,7 @@ app.put('/Empresa/:id', function(req, res) {
     
 });
 
-app.delete('/Empresa/:id', function(req, res) {
+app.delete('/Empresa/:id',[verificaToken, verificaRol ], function(req, res) {
     let id = req.params.id;
     let cambiaEstado ={
         Estado: 'I'

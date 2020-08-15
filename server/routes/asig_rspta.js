@@ -11,7 +11,8 @@ const app = express();
 // Recursos
 const Asignacion =  require ('../models/asignacion'); 
 const Respuesta = require('../models/asig_rspt');
-app.post('/AsigRpta', function (req, res) {
+const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
+app.post('/AsigRpta', [verificaToken, verificaRol ],function (req, res) {
     let now = dateLima;
     let ctr = control;
     let body = req.body;
@@ -49,7 +50,7 @@ app.post('/AsigRpta', function (req, res) {
         });
 
 });
-app.get('/AsigRptas', (req, res) => {
+app.get('/AsigRptas',[verificaToken, verificaRol ], (req, res) => {
     let FechaC = req.body.FechaC;
     let Metricac = req.body.Metrica;
     let Nombre = req.body.Nombre;
@@ -65,7 +66,7 @@ app.get('/AsigRptas', (req, res) => {
             res.json(asignacion)
         });
 });
-app.get('/AsigRpta', (req, res) => {
+app.get('/AsigRpta', [verificaToken, verificaRol ],(req, res) => {
 
     Respuesta.find()
         .exec((err, asignacion) => {
@@ -79,7 +80,7 @@ app.get('/AsigRpta', (req, res) => {
             res.json(asignacion)
         });
 });
-app.get('/AsigRptas/:Empresa', (req, res) => {
+app.get('/AsigRptas/:Empresa',[verificaToken, verificaRol ], (req, res) => {
     let Empresa = req.params.Empresa;
     Respuesta.find({ Empresa: Empresa })
         .exec((err, metrica) => {
@@ -92,7 +93,7 @@ app.get('/AsigRptas/:Empresa', (req, res) => {
             res.json(metrica)
         });
 });
-app.get('/AsigRptaC/:Empresa', (req, res) => {
+app.get('/AsigRptaC/:Empresa',[verificaToken, verificaRol ], (req, res) => {
     let Empresa = req.params.Empresa;
     Respuesta.find({ Empresa: Empresa })
         .exec((err, metrica) => {
@@ -111,7 +112,7 @@ app.get('/AsigRptaC/:Empresa', (req, res) => {
             });
         });
 });
-app.get('/AsigRptaT/:Empresa', (req, res) => {
+app.get('/AsigRptaT/:Empresa', [verificaToken, verificaRol ],(req, res) => {
     let Empresa = req.params.Empresa;
     Asignacion.find({ Empresa: Empresa })
         .exec((err, metrica) => {
@@ -130,7 +131,7 @@ app.get('/AsigRptaT/:Empresa', (req, res) => {
             });
         });
 });
-app.get('/x', (req, res) => {
+app.get('/x',[verificaToken, verificaRol ], (req, res) => {
 
     let body = req.body;
     Respuesta.find({}, (err, respuestaDB) => {

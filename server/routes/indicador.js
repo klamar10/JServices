@@ -11,7 +11,7 @@ const Indicador =  require ('../models/indicador');
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
 
 
-app.get('/Indicadores',(req, res) => {
+app.get('/Indicadores',[verificaToken, verificaRol ],(req, res) => {
 
     Indicador.find()
         .exec((err, indicadores) => {
@@ -21,7 +21,7 @@ app.get('/Indicadores',(req, res) => {
            res.json(indicadores)
         });
 });
-app.get('/Indicador/:Metrica',(req, res) => {
+app.get('/Indicador/:Metrica',[verificaToken, verificaRol ],(req, res) => {
     let Metrica = req.params.Metrica;
     Indicador.find({Metrica: Metrica})
         .exec((err, indicadores) => {
@@ -31,7 +31,7 @@ app.get('/Indicador/:Metrica',(req, res) => {
            res.json(indicadores)
         });
 });
-app.post('/Indicador',function(req,res){
+app.post('/Indicador',[verificaToken, verificaRol ],function(req,res){
     let body = req.body;
 
     let indicador = new Indicador({
@@ -64,7 +64,7 @@ app.post('/Indicador',function(req,res){
             });}
     })
 });
-app.put('/Indicador/:id', function(req, res) {
+app.put('/Indicador/:id',[verificaToken, verificaRol ], function(req, res) {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['Empresa','Zona', 'Departamento', 'Estado'])  ;
@@ -86,7 +86,7 @@ app.put('/Indicador/:id', function(req, res) {
     
 });
 
-app.delete('/Indicador/:id', function(req, res) {
+app.delete('/Indicador/:id', [verificaToken, verificaRol ],function(req, res) {
     let id = req.params.id;
     let cambiaEstado ={
         Estado: 'I'

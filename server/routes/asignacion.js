@@ -9,7 +9,9 @@ const app = express();
 // Recursos
 const Asignacion =  require ('../models/asignacion'); 
 const Indicador =  require ('../models/indicador'); 
-app.post('/Asignacion',function(req,res){
+const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
+
+app.post('/Asignacion',[verificaToken, verificaRol ],function(req,res){
     let now = dateLima
     let body = req.body;
     let asignacion = new Asignacion({
@@ -45,7 +47,7 @@ Asignacion.findOne({Empresa:body.Empresa, Zona: body.Zona,Metrica: body.Metrica,
     })
 
 });
-app.get('/Asignaciones',(req, res) => {
+app.get('/Asignaciones',[verificaToken, verificaRol ],(req, res) => {
     let now = dateLima //Obtienes la fecha
 //var dat2 = Date.parse(dat); //Lo parseas para transformarlo
     Asignacion.find()
@@ -58,7 +60,7 @@ app.get('/Asignaciones',(req, res) => {
           // console.log(dateLima)
         });
 });
-app.get('/Asignaciones/:Nombre',(req,res)=>{
+app.get('/Asignaciones/:Nombre',[verificaToken, verificaRol ],(req,res)=>{
     let Nombre = req.params.Nombre;
     Asignacion.find({Nombre : Nombre})
         .exec((err,   metrica  ) => {
@@ -72,7 +74,7 @@ app.get('/Asignaciones/:Nombre',(req,res)=>{
            res.json(metrica)
         });
 });
-app.get('/Asignacion/:id',(req,res)=>{
+app.get('/Asignacion/:id',[verificaToken, verificaRol ],(req,res)=>{
     let Id = req.params.id;
     Asignacion.findOne({_id : Id})
         .exec((err,  asignacion   ) => {
@@ -85,7 +87,7 @@ app.get('/Asignacion/:id',(req,res)=>{
                 res.json(asig)
         });
 });
-app.delete('/Asignacion/:id', function(req, res) {
+app.delete('/Asignacion/:id', [verificaToken, verificaRol ],function(req, res) {
     let id = req.params.id;
  
     Asignacion.findByIdAndDelete(id, (err, indicadorBorrado)=>{

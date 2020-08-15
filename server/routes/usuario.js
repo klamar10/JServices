@@ -10,7 +10,7 @@ const app = express();
 const Usuario =  require ('../models/usuario'); 
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
 
-app.get('/usuario',(req, res) => {
+app.get('/usuario',[verificaToken, verificaRol ],(req, res) => {
 
     Usuario.find()
         .exec((err, usuarios) => {
@@ -49,9 +49,9 @@ app.get('/usuariox' ,(req, res)=> {
 
 });
 
-app.get('/usuario/:empresa' ,(req, res)=> {
+app.get('/usuario/:empresa' ,[verificaToken, verificaRol ],(req, res)=> {
     let empresa = req.params.empresa;
-    Usuario.find({empresa : empresa})
+    Usuario.find({empresa : empresa, estado : 'Activo' })
         .exec((err, empresa) => {
             if (err) {
                 return res.status(400).json({
@@ -63,7 +63,7 @@ app.get('/usuario/:empresa' ,(req, res)=> {
         });
 });
 
-app.post('/usuario',function(req, res) {
+app.post('/usuario',[verificaToken, verificaRol ],function(req, res) {
 
     let body = req.body;
 

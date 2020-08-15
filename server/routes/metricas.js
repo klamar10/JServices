@@ -13,7 +13,7 @@ const Metrica =  require ('../models/metrica');
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
 
 
-app.get('/Metricas',(req, res) => {
+app.get('/Metricas',[verificaToken, verificaRol ],(req, res) => {
 
     Metrica.find()
         .exec((err, metricas) => {
@@ -23,7 +23,7 @@ app.get('/Metricas',(req, res) => {
            res.json(metricas)
         });
 });
-app.get('/Metrica/:zona' ,(req, res)=> {
+app.get('/Metrica/:zona' ,[verificaToken, verificaRol ],(req, res)=> {
     let zona = req.params.zona;
     Metrica.find({Zona : zona})
         .exec((err, metrica) => {
@@ -36,7 +36,7 @@ app.get('/Metrica/:zona' ,(req, res)=> {
            res.json(metrica)
         });
 });
-app.post('/Metrica',function(req,res){
+app.post('/Metrica',[verificaToken, verificaRol ],function(req,res){
     let body = req.body;
 
     let metrica = new Metrica({
@@ -68,7 +68,7 @@ app.post('/Metrica',function(req,res){
             });}
     })
 });
-app.put('/Metrica/:id', function(req, res) {
+app.put('/Metrica/:id',[verificaToken, verificaRol ], function(req, res) {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['Empresa','Zona', 'Metrica', 'Estado'])  ;
