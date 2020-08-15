@@ -12,7 +12,6 @@ let empresaSchema  = new Schema({
     },
     Nombre:{
         type: String,
-        unique: true,
         required: [true, 'Nombre de empresa es necesario']
     },
     Departamento:{
