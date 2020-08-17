@@ -80,6 +80,19 @@ app.get('/AsigRpta', [verificaToken ],(req, res) => {
             res.json(asignacion)
         });
 });
+app.get('/AsigRptas/:Empresa', (req, res) => {
+    let Usuario = req.params.Empresa;
+    Respuesta.find({ Empresa: Empresa })
+        .exec((err, metrica) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            res.json(metrica)
+        });
+});
 app.get('/AsigRptas/:Empresa',[verificaToken], (req, res) => {
     let Empresa = req.params.Empresa;
     Respuesta.find({ Empresa: Empresa })

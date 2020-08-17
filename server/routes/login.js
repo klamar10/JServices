@@ -44,12 +44,13 @@ app.post('/login', (req, res) =>{
             usuario: usuarioDB 
           }, process.env.SEED, { expiresIn: '1d'}); //60*60*24*30 -- Para 30 dias
           let roles = usuarioDB.roles
+          let nombre = usuarioDB.nombre
           
         res.json({
             ok:true,
             usuario: usuarioDB,
             token,
-            roles
+            roles,nombre
         })
 
     })

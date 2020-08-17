@@ -60,7 +60,7 @@ app.get('/Asignaciones',[verificaToken],(req, res) => {
           // console.log(dateLima)
         });
 });
-app.get('/Asignaciones/:Nombre',[verificaToken, verificaRol ],(req,res)=>{
+app.get('/Asignaciones/:Nombre',(req,res)=>{
     let Nombre = req.params.Nombre;
     Asignacion.find({Nombre : Nombre})
         .exec((err,   metrica  ) => {
