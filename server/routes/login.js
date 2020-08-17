@@ -32,6 +32,14 @@ app.post('/login', (req, res) =>{
             });
         }
 
+        if (usuarioDB.estado = 'Inactivo'){
+            return res.status(400).json({
+                ok: false,
+                err:{
+                    message: 'Usuario no permitido'
+                }
+            });
+        }
         if ( !bcrypt.compareSync(body.password, usuarioDB.password)){
             return res.status(400).json({
                 ok: false,
