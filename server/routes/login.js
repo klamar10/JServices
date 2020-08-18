@@ -14,7 +14,7 @@ app.post('/login', (req, res) =>{
     
     let body  = req.body;
 
-    Usuario.findOne( {email: body.email}, (err, usuarioDB) =>{
+    Usuario.findOne( {email: body.email, estado: 'Activo'}, (err, usuarioDB) =>{
         
         if(err){
             return res.status(500).json({
@@ -32,14 +32,7 @@ app.post('/login', (req, res) =>{
             });
         }
 
-        if (usuarioDB.estado = 'Inactivo'){
-            return res.status(400).json({
-                ok: false,
-                err:{
-                    message: 'Usuario no permitido'
-                }
-            });
-        }
+       
         if ( !bcrypt.compareSync(body.password, usuarioDB.password)){
             return res.status(400).json({
                 ok: false,
