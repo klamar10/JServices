@@ -102,12 +102,21 @@ app.post('/usuario',[verificaToken, verificaRol ],function(req, res) {
 
 
 });
-app.put('/usuario/:id', [verificaToken, verificaRol ],function(req, res) {
+app.put('/usuario/:id',function(req, res) {
 
     let id = req.params.id;
-    let body = _.pick(req.body, ['empresa','nombre','DNI','email','password', 'roles','estado'])  ;
+    let body = req.body;
 
-    Usuario.findByIdAndUpdate( id, body, { new: true, runValidators: true } ,(err, usuarioDB) =>{
+    let usuario = new Usuario({
+        nombre: body.nombre,
+        DNI: body.DNI,
+        email: body.email,
+        password: bcrypt.hashSync(body.password, 10), 
+        roles: body.roles,
+        estado: body.estado,
+        empresa: body.empresa
+    });
+    Usuario.findByIdAndUpdate( id, usuario, { new: true, runValidators: true } ,(err, usuarioDB) =>{
         if(err){
             return res.status(400).json({
                 ok: false,
