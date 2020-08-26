@@ -106,7 +106,7 @@ app.put('/usuario/:id',function(req, res) {
 
     let id = req.params.id;
     let body = req.body;
-    Usuario.findByIdAndUpdate( id, usuario, { new: true, runValidators: true } ,(err, usuarioDB) =>{
+    Usuario.findByIdAndUpdate( id, body, { new: true, runValidators: true } ,(err, usuarioDB) =>{
         if(err){
             return res.status(400).json({
                 ok: false,

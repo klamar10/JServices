@@ -1,13 +1,12 @@
 const express = require('express');
 const _ = require('underscore');
 const moment = require('moment-timezone');
-const dateLima = moment.tz(Date.now(), "America/Lima").format('DD-MM-YYYY HH:mm');
-const control = moment.tz(Date.now(), "America/Lima").format('DD-MM-YYYY');
+const dateLima = moment.tz(Date.now(), "America/Lima").format('DD/MM/YYYY HH:mm');
+const control = moment.tz(Date.now(), "America/Lima").format('DD/MM/YYYY');
 var GPS = require('gps');
 var gps = new GPS;
-// constantes
 const app = express();
-
+console.log(control)
 // Recursos
 const Asignacion =  require ('../models/asignacion'); 
 const Respuesta = require('../models/asig_rspt');
