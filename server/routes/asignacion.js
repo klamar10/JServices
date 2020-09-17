@@ -1,7 +1,7 @@
 const express = require('express');
 const _ = require ('underscore');
 const moment = require('moment-timezone');
-const dateLima= moment.tz(Date.now(), "America/Lima").format('DD/MM/YYYY HH:mm');
+let dateLima = moment.tz('America/Lima').format('DD/MM/YYYY HH:mm');
 const control = moment.tz(Date.now(), "America/Lima").format('DD/MM/YYYY');
 // constantes
 const app = express();

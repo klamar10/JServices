@@ -11,6 +11,7 @@ app.use(require('./indicador'));
 app.use(require('./metricas'));
 app.use(require('./asignacion'));
 app.use(require('./asig_rspta'));
+app.use(require('./soluciones'));
 
 //EXPORT
 module.exports = app;

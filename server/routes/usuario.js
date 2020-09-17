@@ -115,9 +115,9 @@ app.post('/usuario',[verificaToken, verificaRol ],function(req, res) {
 app.put('/usuario/:id',[verificaToken, verificaRol],function(req, res) {
 
     let id = req.params.id;
-    //let body = _.pick(req.body, ['nombre','DNI', 'email', 'password','roles','estado','empresa'])  ;
-    let body = 'Adrianx'
-    Usuario.findByIdAndUpdate( {_id : '5f360fc082088c00174704b6'},{ nombre: body}, { new: true, runValidators: true } ,(err, usuarioDB) =>{
+    let body = _.pick(req.body, ['nombre','DNI', 'email', 'password','roles','estado','empresa'])  ;
+    //let body = 'Adrianx'
+    Usuario.findByIdAndUpdate( id,body, { new: true, runValidators: true } ,(err, usuarioDB) =>{
         if(err){
             return res.status(400).json({
                 ok: false,
