@@ -24,7 +24,7 @@ app.post('/AsigRpta', [verificaToken ],function (req, res) {
         Tipo: body.Tipo,
         Comentarios: body.Comentarios,
         Indicador: body.Indicador,
-        FechaR: now,
+        FechaR: body.FechaR,
         FechaC: ctr
     });
     let met =req.body.Metrica
