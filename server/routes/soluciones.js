@@ -9,10 +9,11 @@ const app = express();
 
 // Recursos
 const Asignacion =  require ('../models/asignacion'); 
-
-app.get('/solucion/nombreAsig/:Nombre',(req,res)=>{
+const Respuesta = require('../models/asig_rspt');
+app.get('/solucion/AsignacionesN/:Nombre',(req,res)=>{
     let Nombre = req.params.Nombre;
-    Asignacion.find({Nombre : Nombre})
+    let Fecha = control
+    Asignacion.find({Nombre : Nombre,Fecha: {$ne: Fecha}})
         .exec((err,   metrica  ) => {
             if (err) {
                 return res.status(400).json({
@@ -20,11 +21,64 @@ app.get('/solucion/nombreAsig/:Nombre',(req,res)=>{
                     err
                 });
             }
-            res.json(metrica)
+            Asignacion.countDocuments({Nombre : Nombre, Fecha: {$ne: Fecha}}, (err, conteo)=>{
+                res.json({
+                    ok: true,
+                    cantidad: conteo,
+                    metrica
+                    //89
+                });
+                });
         });
 });
-
-
+app.get('/solucion/Asignacione/:Metrica',(req,res)=>{
+    let Metrica = req.params.Metrica;
+    let Fecha = control
+    Asignacion.find({Metrica : Metrica})
+        .exec((err,   metrica  ) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+        });
+});
+app.get('/solucion/AsignacionR/:Nombre',(req,res)=>{
+    let Nombre = req.params.Nombre;
+    let Fecha = control
+    Respuesta.find({Nombre : Nombre, FechaC:Fecha})
+        .exec((err,   metrica  ) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            Respuesta.countDocuments({Nombre : Nombre, FechaC:Fecha}, (err, conteo)=>{
+                res.json({
+                    ok: true,
+                    cantidad: conteo,
+                    metrica
+                    //89
+                });
+                });
+        });
+});
+app.get('/solucion/Respuesta',(req,res)=>{
+    let Zona = req.body.Zona;
+    let Fecha = control
+    Respuesta.find({Metrica: Zona})
+        .exec((err,   metrica  ) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+           res.json(metrica)
+        });
+});
 app.put('/solucion/nombreAsigU/:Nombre',function(req, res) {
     let Nombre = req.params.Nombre;
     //let body = _.pick(req.body, ['Nombre'])  ;

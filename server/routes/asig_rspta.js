@@ -31,13 +31,14 @@ app.post('/AsigRpta', [verificaToken ],function (req, res) {
     let indicador =req.body.Indicador
     let nombre =req.body.Nombre
     let fecha = ctr
-    Respuesta.findOne({Nombre: body.Nombre, FechaC: ctr, Metrica: met}, (err, respuestaDB) => {
+    let Zona= req.body.Zona
+    Respuesta.findOne({Nombre: body.Nombre, FechaC: ctr, Metrica: met, Zona:Zona, Indicador: indicador}, (err, respuestaDB) => {
         if (!respuestaDB){
             respuesta.save((err, regis)=>{
                 if(err){
                     return res.status(400).json(err);
                 }
-                Asignacion.findOneAndUpdate( {Metrica: met, Nombre: nombre, Indicador: indicador}, {Fecha: fecha}, { new: true, runValidators: true } ,(err, usuarioDB) =>{
+                Asignacion.findOneAndUpdate( {Metrica: met, Nombre: nombre, Indicador: indicador, Zona:Zona}, {Fecha: fecha}, { new: true, runValidators: true } ,(err, usuarioDB) =>{
                     if(err){
                         return res.status(400).json({
                             ok: false,
@@ -50,10 +51,6 @@ app.post('/AsigRpta', [verificaToken ],function (req, res) {
                     metrica: regis
                     });
                 })
-              /*  res.json({
-                    ok: true,
-                    metrica: regis
-                });*/
             })
         }else {
         return res.status(400).json({
