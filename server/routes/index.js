@@ -12,6 +12,9 @@ app.use(require('./metricas'));
 app.use(require('./asignacion'));
 app.use(require('./asig_rspta'));
 app.use(require('./soluciones'));
+app.use(require('./ruta'));
+app.use(require('./AsigRuta'));
+app.use(require('./Respuesta'));
 
 //EXPORT
 module.exports = app;

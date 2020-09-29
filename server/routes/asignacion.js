@@ -1,5 +1,5 @@
 const express = require('express');
-const _ = require ('underscore');
+const _ = require('underscore');
 const moment = require('moment-timezone');
 let dateLima = moment.tz('America/Lima').format('DD/MM/YYYY HH:mm');
 const control = moment.tz(Date.now(), "America/Lima").format('DD/MM/YYYY');
@@ -8,147 +8,135 @@ const app = express();
 
 
 // Recursos
-const Asignacion =  require ('../models/asignacion'); 
-const Respuesta = require('../models/asig_rspt');
-const Indicador =  require ('../models/indicador'); 
+const Asignacion = require('../models/asignacion');
+const Ruta = require('../models/rutas');
+const RespuestaN = require('../models/respuestas');
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
+const rutas = require('../models/rutas');
 
-app.post('/Asignacion',[verificaToken, verificaRol ],function(req,res){
+app.post('/Asignacion', [verificaToken, verificaRol], function (req, res) {
     let now = dateLima
+    let fech = ''
     let body = req.body;
     let asignacion = new Asignacion({
         Empresa: body.Empresa,
         Zona: body.Zona,
-        Nombre: body.Nombre,
         Metrica: body.Metrica,
         Indicador: body.Indicador,
-        Fecha: now
+        Fecha: 0,
+        Ruta: body.Ruta
     });
-Asignacion.findOne({Empresa:body.Empresa, Zona: body.Zona,Metrica: body.Metrica,Nombre: body.Nombre},(err,asig)=>{
-        if(!asig){
-            asignacion.save( (err,asigDB)=>{
-                if(err){
-                    return res.status(400).json({
+    Asignacion.findOne({ Empresa: body.Empresa, Zona: body.Zona, Metrica: body.Metrica, Ruta: body.Ruta }, (err, asig) => {
+        if (!asig) {
+            asignacion.save((err, asigDB) => {
+                if (err) {
+                    return res.status(401).json({
                         ok: false,
                         err
                     });
                 }
                 //usuarioDB.password = null;
-                res.json({
-                    ok: true,
-                    asignacion: asigDB
-                });
+                res.json(asigDB).status(200)
             });
-        }else {
+        } else {
             return res.status(400).json({
                 ok: false,
-                err:{
+                err: {
                     message: 'Ya se encuentra asignado'
                 }
-            });}
+            });
+        }
     })
 
 });
-app.get('/Asignaciones',[verificaToken],(req, res) => {
-    let now = dateLima //Obtienes la fecha
-//var dat2 = Date.parse(dat); //Lo parseas para transformarlo
+// CREAR ASIGNACION - RUTA // antes
+app.post('/Asignacionx', (req, res) => {
+    let now = dateLima
+    let body = req.body;
+    let asignacion = new Asignacion({
+        Empresa: body.Empresa,
+        Zona: body.Zona,
+        Metrica: body.Metrica,
+        Indicador: body.Indicador,
+        Fecha: now,
+        Ruta: body.ruta
+    });
+    asignacion.save((err, asigDB) => {
+        if (err) {
+            return res.status(401)
+        }
+        if (!asigDB) {
+            return res.status(400)
+        }
+        res.json(asigDB)
+    });
+    //return res.json(asignacion)
+
+}); 0
+
+// TODAS LAS ASIGNACIONES
+app.get('/Asignaciones', [verificaToken, verificaRol ], (req, res) => {
     Asignacion.find()
         .exec((err, asignacion) => {
             if (err) {
-                return res.status(400).json(err);
+                return res.status(401).json({
+                    ok: false,
+                    err
+                });
             }
-           res.json(asignacion)
+            res.json(asignacion)
+        });
+});
 
-          // console.log(dateLima)
-        });
-});
-app.get('/Asignaciones/:Nombre',[verificaToken],(req,res)=>{
-    let Nombre = req.params.Nombre;
-    let fecha = control
-    Asignacion.find({Nombre : Nombre, Fecha:{$ne: fecha}})
-        .exec((err,   metrica  ) => {
+// LISTAR RUTAS POR ZONA
+app.get('/Asignaciones/:Ruta', [verificaToken, verificaRol ], (req, res) => {
+    let Ruta = req.params.Ruta
+    Asignacion.find({ Ruta: Ruta, Fecha:{$ne : control} })
+        .exec((err, ress) => {
             if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
+                res.status(401)
             }
-            res.json(metrica)
-        });
-});
-/*
-app.get('/AsignacioneT/:Nombre',(req,res)=>{
-    let Nombre = req.params.Nombre;
-    Asignacion.find({Nombre : {$ne: Nombre}})
-        .exec((err,   metrica  ) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
+            if (Ruta == '') {
+                res.json('Ninguna ruta')
             }
-            res.json(metrica)
-});
- });
-app.get('/Asignacionex/:Nombre',(req,res)=>{
-    let Nombre = req.params.Nombre;
-   Respuesta.find({Nombre : Nombre, FechaC: '07/09/2020'})
-        .exec((err,   metrica  ) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-            Respuesta.countDocuments({Nombre : Nombre, FechaC: '07/09/2020'}, (err, conteo) => {
-
-                res.json({
-                    ok: true,
-                    metrica,
-                    cantidad: conteo
-                });
-            });
-        });
-
-});
-*/
-app.get('/Asignacion/:id',[verificaToken ],(req,res)=>{
-    let Id = req.params.id;
-    Asignacion.findOne({_id : Id})
-        .exec((err,  asignacion   ) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }let asig = (asignacion )
-                res.json(asig)
-        });
-});
-app.delete('/Asignacion/:id', [verificaToken, verificaRol ],function(req, res) {
-    let id = req.params.id;
- 
-    Asignacion.findByIdAndDelete(id, (err, indicadorBorrado)=>{
-      //  Empresa.findByIdAndUpdate(id,cambiaEstado,{new: true} ,(err,  estadoBorrado)=>{
+            res.json(ress)
+        })
+})
+// OBTENER ASIGNACIONES X ID
+app.get('/AsignacionesID/:id', [verificaToken ], (req, res) => {
+    let id = req.params.id
+  
+    Asignacion.findById({_id: id})
+    .exec((err,resul)=>{
         if(err){
-            return res.status(400).json({
+            res.status(401)
+        }
+        res.json(resul)
+    })
+});
+//ELIMINAR
+app.delete('/Asignacion/:id',[verificaToken, verificaRol ],  function (req, res) {
+    let id = req.params.id;
+    Asignacion.findByIdAndDelete(id, (err, ress) => {
+        if (err) {
+            return res.status(401).json({
                 ok: false,
-                err
+                err0
+
             });
         };
-        if (!indicadorBorrado){
+        if (!ress) {
             return res.status(400).json({
-                ok:false,
-                error:{
+                ok: false,
+                error: {
                     message: 'Asignacion no encontrado'
                 }
             });
         }
-        res.json({
-            ok: true,
-            zona: indicadorBorrado
-        })
-    })
+        res.json(ress).status(200)
+    });
 
 });
+
+
 module.exports = app;

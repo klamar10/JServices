@@ -16,10 +16,6 @@ let asignacionSchema = new Schema({
         type: String,
         required:[true, 'Zona es necesario']
     },
-    Nombre:{
-        type: String,
-        required: [true, 'Nombre es necesario']
-    },
     Metrica:{
         type: String,
         required: [true, 'Metrica es necesario']
@@ -31,8 +27,11 @@ let asignacionSchema = new Schema({
     Fecha:{
         type: String,
         required: [true, 'Fecha es necesario']
+    },
+    Ruta:{
+        type: String,
+        required: [true, 'Ruta es necesario']
     }
-    
 })
 asignacionSchema.virtual('fecha_asignacion')
   .set(function(fecha) {

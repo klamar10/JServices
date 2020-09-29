@@ -10,16 +10,19 @@ const app = express();
 // Recursos
 const Asignacion =  require ('../models/asignacion'); 
 const Respuesta = require('../models/asig_rspt');
+const RespuestaN = require('../models/respuestas');
+const AsigRuta = require('../models/AsigRuta');
+const Rutas = require('../models/rutas');
 app.get('/solucion/AsignacionesN/:Nombre',(req,res)=>{
     let Nombre = req.params.Nombre;
     let Fecha = control
     Asignacion.find({Nombre : Nombre,Fecha: {$ne: Fecha}})
         .exec((err,   metrica  ) => {
             if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
             }
             Asignacion.countDocuments({Nombre : Nombre, Fecha: {$ne: Fecha}}, (err, conteo)=>{
                 res.json({
@@ -31,10 +34,10 @@ app.get('/solucion/AsignacionesN/:Nombre',(req,res)=>{
                 });
         });
 });
-app.get('/solucion/Asignacione/:Metrica',(req,res)=>{
-    let Metrica = req.params.Metrica;
+app.get('/solucion/Asignaciones/:Nombre',(req,res)=>{
+    let Nombre = req.params.Nombre;
     let Fecha = control
-    Asignacion.find({Metrica : Metrica})
+    Asignacion.find({Nombre : Nombre,Fecha: Fecha})
         .exec((err,   metrica  ) => {
             if (err) {
                 return res.status(400).json({
@@ -42,6 +45,14 @@ app.get('/solucion/Asignacione/:Metrica',(req,res)=>{
                     err
                 });
             }
+            Asignacion.countDocuments({Nombre : Nombre, Fecha: Fecha}, (err, conteo)=>{
+                res.json({
+                    ok: true,
+                    cantidad: conteo,
+                    metrica
+                    //89
+                });
+                });
         });
 });
 app.get('/solucion/AsignacionR/:Nombre',(req,res)=>{
@@ -97,5 +108,30 @@ app.put('/solucion/nombreAsigU/:Nombre',function(req, res) {
     })
     
 });
+// ELIMINACION DE CAMPO NOMBRE
+app.get('/Eliminar',(req,res)=>{
+    Asignacion.deleteMany({Empresa:{$exists:true}})
+    .exec((err,resp)=>{
+        if(err){
+
+        }res.json(resp)
+    })
+})
+app.get('/EliminarAsig',(req,res)=>{
+    Rutas.deleteMany({trabajador:{$exists:true}})
+    .exec((err,resp)=>{
+        if(err){
+
+        }res.json(resp)
+    })
+})
+app.get('/EliminarRespuestaN',(req,res)=>{
+    RespuestaN.deleteMany({Comentarios:{$exists:true}})
+    .exec((err,resp)=>{
+        if(err){
+
+        }res.json(resp)
+    })
+})
 
 module.exports = app;

@@ -90,7 +90,7 @@ app.put('/Metrica/:id',[verificaToken, verificaRol ], function(req, res) {
     
 });
 
-app.delete('/Metrica/:id', function(req, res) {
+app.delete('/Metrica/:id', [verificaToken, verificaRol ],function(req, res) {
     let id = req.params.id;
     let cambiaEstado ={
         Estado: 'I'

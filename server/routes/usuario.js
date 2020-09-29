@@ -10,7 +10,7 @@ const app = express();
 const Usuario =  require ('../models/usuario'); 
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
 
-app.get('/usuario',(req, res) => {
+app.get('/usuario',[verificaToken, verificaRol ],(req, res) => {
 
     Usuario.find()
         .exec((err, usuarios) => {
@@ -21,7 +21,7 @@ app.get('/usuario',(req, res) => {
         });
 });
 app.get('/usuarioA',[verificaToken, verificaRol ],(req, res) => {
-    
+    //,roles: 'Usuario'
     Usuario.find({estado: 'Activo',roles: 'Usuario'})
         .exec((err, usuarios) => {
             if (err) {

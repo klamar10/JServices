@@ -6,12 +6,12 @@ const control = moment.tz(Date.now(), "America/Lima").format('DD/MM/YYYY');
 var GPS = require('gps');
 var gps = new GPS;
 const app = express();
-console.log(control)
 // Recursos
 const Asignacion =  require ('../models/asignacion'); 
 const Respuesta = require('../models/asig_rspt');
+const Usuario = require('../models/usuario');
 const { verificaToken, verificaRol } = require('../middlewares/autenticacion');
-app.post('/AsigRpta', [verificaToken ],function (req, res) {
+/*app.post('/AsigRpta', [verificaToken ],function (req, res) {
     let now = dateLima;
     let ctr = control;
     let body = req.body;
@@ -38,7 +38,7 @@ app.post('/AsigRpta', [verificaToken ],function (req, res) {
                 if(err){
                     return res.status(400).json(err);
                 }
-                Asignacion.findOneAndUpdate( {Metrica: met, Nombre: nombre, Indicador: indicador, Zona:Zona}, {Fecha: fecha}, { new: true, runValidators: true } ,(err, usuarioDB) =>{
+               /* Asignacion.findOneAndUpdate( {Metrica: met, Nombre: nombre, Indicador: indicador, Zona:Zona}, {Fecha: fecha}, { new: true, runValidators: true } ,(err, usuarioDB) =>{
                     if(err){
                         return res.status(400).json({
                             ok: false,
@@ -52,6 +52,7 @@ app.post('/AsigRpta', [verificaToken ],function (req, res) {
                     });
                 })
             })
+            res.json(regis)
         }else {
         return res.status(400).json({
             ok: false,
@@ -61,12 +62,44 @@ app.post('/AsigRpta', [verificaToken ],function (req, res) {
         });}
         });
 
-});
-app.get('/AsigRptas',[verificaToken ], (req, res) => {
-    let FechaC = req.body.FechaC;
-    let Metricac = req.body.Metrica;
-    let Nombre = req.body.Nombre;
-    Respuesta.find({ Metrica: Metricac, FechaC: FechaC, Nombre: Nombre })
+});*/
+/*app.post('/AsigRpta', [verificaToken ],function (req, res) {
+    let now = dateLima;
+    let ctr = control;
+    let body = req.body;
+    let respuesta = new Respuesta({
+        Empresa: body.Empresa,
+        Zona: body.Zona,
+        Nombre: body.Nombre,
+        Ruta: body.Ruta,
+        Metrica: body.Metrica,
+        Condicion: body.Condicion,
+        Tipo: body.Tipo,
+        Comentarios: body.Comentarios,
+        Indicador: body.Indicador,
+        FechaR: body.FechaR,
+        FechaC: ctr
+    });
+    Respuesta.findOne({Ruta: body.Ruta,Nombre: body.Nombre, FechaC: ctr, Metrica: body.Metrica, Zona:body.Zona, Indicador:body.Indicador}, (err, respuestaDB) => {
+        if (!respuestaDB){
+            respuesta.save((err, regis)=>{
+                if(err){
+                    return res.status(400).json(err);
+                }
+                res.json(regis)
+            });
+            }else{return res.status(400).json({
+                ok: false,
+                err:{
+                    message: 'Ya se encuentra gestionado'
+                }
+            });}
+    });
+});*/
+
+app.get('/AsigRptas', (req, res) => {
+ 
+    Respuesta.find()
         .exec((err, asignacion) => {
             if (err) {
                 return res.status(400).json(
