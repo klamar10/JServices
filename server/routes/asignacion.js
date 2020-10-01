@@ -75,7 +75,7 @@ app.post('/Asignacionx', (req, res) => {
 }); 0
 
 // TODAS LAS ASIGNACIONES
-app.get('/Asignaciones', [verificaToken, verificaRol ], (req, res) => {
+app.get('/Asignaciones', [verificaToken ], (req, res) => {
     Asignacion.find()
         .exec((err, asignacion) => {
             if (err) {
@@ -89,7 +89,7 @@ app.get('/Asignaciones', [verificaToken, verificaRol ], (req, res) => {
 });
 
 // LISTAR RUTAS POR ZONA
-app.get('/Asignaciones/:Ruta', [verificaToken, verificaRol ], (req, res) => {
+app.get('/Asignaciones/:Ruta', [verificaToken ],(req, res) => {
     let Ruta = req.params.Ruta
     Asignacion.find({ Ruta: Ruta, Fecha:{$ne : control} })
         .exec((err, ress) => {

@@ -36,12 +36,24 @@ app.post('/Ruta', [verificaToken, verificaRol ],function(req,res){
         Ruta   : body.Ruta,
         Estado : body.Estado
     });
-    ruta.save((err,ruta)=>{
+    Rutas.findOne({Ruta: Ruta}, (err, ruta)=>{
         if(err){
-            return res.status(500)
+            res.status(401)
         }
-        res.json(ruta)
-    });
+        if(!ruta){
+            ruta.save((err,ruta)=>{
+                if(err){
+                    return res.status(500)
+                }
+                res.json(ruta)
+            });
+        }else{
+            res.status(500)
+        }
+
+    })
+    
+    
 });
 //ELIMINAR RUTA
 app.delete('/Ruta-Eliminar/:id',[verificaToken, verificaRol ],function(req,res){

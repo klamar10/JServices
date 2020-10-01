@@ -109,7 +109,7 @@ app.put('/solucion/nombreAsigU/:Nombre',function(req, res) {
     
 });
 // ELIMINACION DE CAMPO NOMBRE
-app.get('/Eliminar',(req,res)=>{
+app.delete('/Eliminar',(req,res)=>{
     Asignacion.deleteMany({Empresa:{$exists:true}})
     .exec((err,resp)=>{
         if(err){
@@ -117,8 +117,8 @@ app.get('/Eliminar',(req,res)=>{
         }res.json(resp)
     })
 })
-app.get('/EliminarAsig',(req,res)=>{
-    Rutas.deleteMany({trabajador:{$exists:true}})
+app.put('/RutasActualizar',(req,res)=>{
+    AsigRuta.updateMany({Ruta: 'RUTA 5 '}, {Ruta: 'RUTA 5'})
     .exec((err,resp)=>{
         if(err){
 
@@ -134,4 +134,18 @@ app.get('/EliminarRespuestaN',(req,res)=>{
     })
 })
 
+app.get('/Asignacionesi', (req, res) => {
+    Asignacion.find({ Ruta: 'RUTA 5 ' })
+        .exec((err, ress) => {
+            if (err) {
+                res.status(401)
+            }
+            Asignacion.updateMany({ Ruta: 'RUTA 5 ' }, { Ruta: 'RUTA 5' }, (err, x)=>{
+                if(err){
+                    res.status(400)
+                }
+                res.json(x)
+            })
+        })
+})
 module.exports = app;

@@ -39,7 +39,7 @@ app.post('/AsigRuta',[verificaToken, verificaRol ], function(req,res){
         });
 
 // LISTA TODAS LAS ASIGNACION DE RUTAS
-app.get('/AsigRutas', [verificaToken, verificaRol ], (req,res)=>{
+app.get('/AsigRutas', (req,res)=>{
     
     AsigRuta.find({})
     .exec(function (err, asignaciones) {
@@ -62,7 +62,7 @@ app.get('/RutasDisponibles/:nombre',[verificaToken ], (req,res)=>{
     })
 });
 // lISTA DE ASIGNACIONES POR RUTA
-app.get('/AsignacionesRuta/:ruta',[verificaToken ], (req,res)=>{
+app.get('/AsignacionesRuta/:ruta', [verificaToken, ver ],(req,res)=>{
     let ruta = req.params.ruta
 
     Asignaciones.find({Ruta: ruta, Fecha:{$ne : control}})
@@ -74,7 +74,7 @@ app.get('/AsignacionesRuta/:ruta',[verificaToken ], (req,res)=>{
     })
 });
 // BUSCAR PARA INACTIVAR
-app.get('/AsigRutasU/:id', [verificaToken, verificaRol ], (req,res)=>{
+app.get('/AsigRutasU/:id',[verificaToken, verificaRol ] , (req,res)=>{
     let id = req.params.id
     let rutas = req.params.Rutas
    AsigRuta.findById({_id:id})
@@ -98,10 +98,17 @@ app.get('/AsigRutasU/:id', [verificaToken, verificaRol ], (req,res)=>{
                     }
                 });
             }
-            res.json({
-                ok: true,
-                usuario: rutacambiada
+            Asignaciones.updateMany({Ruta: ress.Ruta}, {Fecha: '0'},{new: true} ,(err,  actualizarA)=>{
+                if(err){
+                    res.status(500).json('No se pudo actualizar la fecha')
+                }
+                res.json({
+                    ok: true,
+                    usuario: rutacambiada,
+                    Fecha: actualizarA
+                })
             })
+            
            })
 
        }
@@ -125,7 +132,7 @@ app.get('/AsigRutasU/:id', [verificaToken, verificaRol ], (req,res)=>{
             if(err){
                 res.status(400).json('no se puedo inactivar el resto')
             }
-            Asignaciones.updateMany({Ruta: ress.Ruta},{Fecha:0}, {new: true},(err, cero)=>{
+            Asignaciones.updateMany({Ruta: ress.Ruta},{Fecha:'0'}, {new: true},(err, cero)=>{
                 if(err){
                     res.json('Fecha 0').status(500)
                 }

@@ -16,15 +16,7 @@ var schema = new Schema({
     Estado:{
         type: String,
         required: [true, 'El Estado es necesario']
-    },
-    asignaciones:[{
-        type: Schema.Types.ObjectId,
-        ref:('Asignaciones')
-    }],
-    respuesta:[{
-        type: Schema.Types.ObjectId,
-        ref:('AsigRuta')
-    }]    
+    } 
 });
 schema.plugin( uniqueValidator, { message: '{PATH} debe de ser único'});
 module.exports=mongoose.model('Rutas', schema);
