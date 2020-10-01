@@ -62,7 +62,7 @@ app.get('/RutasDisponibles/:nombre',[verificaToken ], (req,res)=>{
     })
 });
 // lISTA DE ASIGNACIONES POR RUTA
-app.get('/AsignacionesRuta/:ruta', [verificaToken, ver ],(req,res)=>{
+app.get('/AsignacionesRuta/:ruta', [verificaToken ],(req,res)=>{
     let ruta = req.params.ruta
 
     Asignaciones.find({Ruta: ruta, Fecha:{$ne : control}})
