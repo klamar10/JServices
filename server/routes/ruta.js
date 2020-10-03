@@ -31,27 +31,17 @@ app.get('/Rutas-Activas', [verificaToken, verificaRol ],(req,res)=>{
 app.post('/Ruta', [verificaToken, verificaRol ],function(req,res){
     
     let body = req.body;
-
     let ruta = new Rutas({
         Ruta   : body.Ruta,
         Estado : body.Estado
     });
-    Rutas.findOne({Ruta: Ruta}, (err, ruta)=>{
-        if(err){
-            res.status(401)
-        }
-        if(!ruta){
-            ruta.save((err,ruta)=>{
+      
+            ruta.save((err,result)=>{
                 if(err){
                     return res.status(500)
                 }
-                res.json(ruta)
+                res.json(result)
             });
-        }else{
-            res.status(500)
-        }
-
-    })
     
     
 });

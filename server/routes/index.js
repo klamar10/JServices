@@ -15,6 +15,8 @@ app.use(require('./soluciones'));
 app.use(require('./ruta'));
 app.use(require('./AsigRuta'));
 app.use(require('./Respuesta'));
+//app.use(require('../Controller/Reportes'));
 
+//app.use(require('../Controller/Evaluaciones.controller'));
 //EXPORT
 module.exports = app;
